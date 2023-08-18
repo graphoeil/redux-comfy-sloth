@@ -43,7 +43,7 @@ const App = () => {
 				{/* Single product */}
 
 				{/* Checkout */}
-				<Route path="/checkout" element={ <PrivateRoute><Checkout/></PrivateRoute> }/>
+				<Route path="/checkout" element={ <Checkout/> }/>
 				{/* Checkout */}
 
 				{/* Error 404 */}
