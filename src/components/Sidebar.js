@@ -9,7 +9,11 @@ import CartButtons from './CartButtons';
 
 // Component
 const Sidebar = () => {
-	return <h4>sidebar</h4>
+	return(
+		<SidebarContainer>
+			
+		</SidebarContainer>
+	);
 };
 
 // Styled
