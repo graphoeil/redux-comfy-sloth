@@ -16,8 +16,8 @@ const userSlice = createSlice({
 	reducers:{
 
 	},
-	extraReducers:{
-
+	extraReducers:(builder) => {
+		
 	}
 });
 

@@ -15,8 +15,8 @@ const cartSlice = createSlice({
 	reducers:{
 
 	},
-	extraReducers:{
-
+	extraReducers:(builder) => {
+		
 	}
 });
 
