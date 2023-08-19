@@ -1,19 +1,66 @@
 // Imports
 import React from 'react';
-import logo from '../assets/logo.svg';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
-import { links } from '../utils/constants';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from "react-redux";
+import { hideSidebar } from "../store/features/productsSlice";
+import { links } from '../utils/constants';
+import logo from '../assets/logo.svg';
 import CartButtons from './CartButtons';
+
+/* The sidebar is hidden on the left side, we make it appear when clicking 
+on the mobile button  in Navbar.js via a translate(0) with transition, 
+we close it here via a click, the whole thing is managed 
+from productsSlice.js */
 
 // Component
 const Sidebar = () => {
+
+	// Store
+	const { isSidebarOpen } = useSelector((store) => { return store.products; });
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Return
 	return(
 		<SidebarContainer>
-			
+			<aside className={ `sidebar ${ isSidebarOpen ? 'show-sidebar' : '' }` }>
+				<div className="sidebar-header">
+					<img src={ logo } alt="Comfy Sloth" className="logo" />
+					<button type="button" className="close-btn" onClick={ () => { dispatch(hideSidebar()); } }>
+						<FaTimes/>
+					</button>
+				</div>
+				<ul className="links">
+					{
+						links.map((link) => {
+							const { id, text, url } = link;
+							return(
+								<li key={ id }>
+									<NavLink key={ id } to={ url } className={ ({ isActive }) => {
+										return isActive ? 'active' : '';
+									} } end onClick={ () => { dispatch(hideSidebar()); } }>
+										{ text }
+									</NavLink>
+								</li>
+							);
+						})
+					}
+					<li>
+						<NavLink to="/checkout" className={ ({ isActive }) => {
+							return isActive ? 'active' : '';
+						} } end onClick={ () => { dispatch(hideSidebar()); } }>
+							Checkout
+						</NavLink>
+					</li>
+				</ul>
+				<CartButtons/>
+			</aside>
 		</SidebarContainer>
 	);
+	
 };
 
 // Styled
@@ -55,7 +102,7 @@ const SidebarContainer = styled.div`
 		transition: var(--transition);
 		letter-spacing: var(--spacing);
 	}
-	.links a:hover {
+	.links a:hover, .links a.active {
 		padding: 1rem 1.5rem;
 		padding-left: 2rem;
 		background: var(--clr-grey-10);

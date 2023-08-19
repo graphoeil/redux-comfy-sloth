@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Initial state
 const initialState = {
-
+	isSidebarOpen:false
 };
 
 // Async methods
@@ -13,7 +13,13 @@ const productsSlice = createSlice({
 	name:'products',
 	initialState,
 	reducers:{
-
+		// Show / hide sidebar
+		showSidebar:(state) => {
+			state.isSidebarOpen = true;
+		},
+		hideSidebar:(state) => {
+			state.isSidebarOpen = false;
+		}
 	},
 	extraReducers:(builder) => {
 		
@@ -21,7 +27,7 @@ const productsSlice = createSlice({
 });
 
 // Actions export
-export const {  } = productsSlice.actions;
+export const { showSidebar, hideSidebar } = productsSlice.actions;
 
 // Reducer export
 export default productsSlice.reducer;

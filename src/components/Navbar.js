@@ -1,14 +1,21 @@
 // Imports
 import React from 'react';
 import styled from 'styled-components';
-import logo from '../assets/logo.svg';
 import { FaBars } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { showSidebar } from "../store/features/productsSlice";
 import { links } from '../utils/constants';
+import logo from '../assets/logo.svg';
 import CartButtons from './CartButtons';
 
 // Component
 const Nav = () => {
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Return
 	return(
 		<NavContainer>
 			<div className="nav-center">
@@ -16,7 +23,7 @@ const Nav = () => {
 					<Link to="/">
 						<img src={ logo } alt="Comfy Sloth" />
 					</Link>
-					<button type="button" className="nav-toggle">
+					<button type="button" className="nav-toggle" onClick={ () => { dispatch(showSidebar()); } }>
 						<FaBars/>
 					</button>
 				</div>
@@ -35,11 +42,19 @@ const Nav = () => {
 							);
 						})
 					}
+					<li>
+						<NavLink to="/checkout" className={ ({ isActive }) => {
+							return isActive ? 'active' : '';
+						} } end>
+							Checkout
+						</NavLink>
+					</li>
 				</ul>
 				<CartButtons/>
 			</div>
 		</NavContainer>
 	);
+	
 };
 
 // Styled

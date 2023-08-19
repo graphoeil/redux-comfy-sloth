@@ -3,10 +3,34 @@ import React from 'react';
 import { FaShoppingCart, FaUserMinus, FaUserPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from "react-redux";
+import { hideSidebar } from "../store/features/productsSlice";
 
 // Components
 const CartButtons = () => {
-	return <h4>cart buttons</h4>
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Return
+	return(
+		// cart-btn-wrapped is managed by Navbar.js
+		// to display or hide the component
+		<Wrapper className="cart-btn-wrapper">
+			{/* We close the sidebar (mobile) after a click on a link or the cart buttons */}
+			<Link to="/cart" className="cart-btn" onClick={ () => { dispatch(hideSidebar()); } }>
+				Cart
+				<span className="cart-container">
+					<FaShoppingCart/>
+					<span className="cart-value">10</span>
+				</span>
+			</Link>
+			<button type="button" className="auth-btn">
+				Login <FaUserPlus/>
+			</button>
+		</Wrapper>
+	);
+
 };
 
 // Styled
