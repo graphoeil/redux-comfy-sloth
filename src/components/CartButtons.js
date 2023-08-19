@@ -4,7 +4,7 @@ import { FaShoppingCart, FaUserMinus, FaUserPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from "react-redux";
-import { hideSidebar } from "../store/features/productsSlice";
+import { closeSidebar } from "../store/features/productsSlice";
 
 // Components
 const CartButtons = () => {
@@ -18,7 +18,7 @@ const CartButtons = () => {
 		// to display or hide the component
 		<Wrapper className="cart-btn-wrapper">
 			{/* We close the sidebar (mobile) after a click on a link or the cart buttons */}
-			<Link to="/cart" className="cart-btn" onClick={ () => { dispatch(hideSidebar()); } }>
+			<Link to="/cart" className="cart-btn" onClick={ () => { dispatch(closeSidebar()); } }>
 				Cart
 				<span className="cart-container">
 					<FaShoppingCart/>

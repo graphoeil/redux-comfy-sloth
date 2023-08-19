@@ -13,11 +13,11 @@ const productsSlice = createSlice({
 	name:'products',
 	initialState,
 	reducers:{
-		// Show / hide sidebar
-		showSidebar:(state) => {
+		// Open / close sidebar
+		openSidebar:(state) => {
 			state.isSidebarOpen = true;
 		},
-		hideSidebar:(state) => {
+		closeSidebar:(state) => {
 			state.isSidebarOpen = false;
 		}
 	},
@@ -27,7 +27,7 @@ const productsSlice = createSlice({
 });
 
 // Actions export
-export const { showSidebar, hideSidebar } = productsSlice.actions;
+export const { openSidebar, closeSidebar } = productsSlice.actions;
 
 // Reducer export
 export default productsSlice.reducer;

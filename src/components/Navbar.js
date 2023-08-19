@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch } from "react-redux";
-import { showSidebar } from "../store/features/productsSlice";
+import { openSidebar } from "../store/features/productsSlice";
 import { links } from '../utils/constants';
 import logo from '../assets/logo.svg';
 import CartButtons from './CartButtons';
@@ -23,7 +23,7 @@ const Nav = () => {
 					<Link to="/">
 						<img src={ logo } alt="Comfy Sloth" />
 					</Link>
-					<button type="button" className="nav-toggle" onClick={ () => { dispatch(showSidebar()); } }>
+					<button type="button" className="nav-toggle" onClick={ () => { dispatch(openSidebar()); } }>
 						<FaBars/>
 					</button>
 				</div>

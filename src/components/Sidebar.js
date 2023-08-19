@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from "react-redux";
-import { hideSidebar } from "../store/features/productsSlice";
+import { closeSidebar } from "../store/features/productsSlice";
 import { links } from '../utils/constants';
 import logo from '../assets/logo.svg';
 import CartButtons from './CartButtons';
@@ -29,7 +29,7 @@ const Sidebar = () => {
 			<aside className={ `sidebar ${ isSidebarOpen ? 'show-sidebar' : '' }` }>
 				<div className="sidebar-header">
 					<img src={ logo } alt="Comfy Sloth" className="logo" />
-					<button type="button" className="close-btn" onClick={ () => { dispatch(hideSidebar()); } }>
+					<button type="button" className="close-btn" onClick={ () => { dispatch(closeSidebar()); } }>
 						<FaTimes/>
 					</button>
 				</div>
@@ -41,7 +41,7 @@ const Sidebar = () => {
 								<li key={ id }>
 									<NavLink key={ id } to={ url } className={ ({ isActive }) => {
 										return isActive ? 'active' : '';
-									} } end onClick={ () => { dispatch(hideSidebar()); } }>
+									} } end onClick={ () => { dispatch(closeSidebar()); } }>
 										{ text }
 									</NavLink>
 								</li>
@@ -51,7 +51,7 @@ const Sidebar = () => {
 					<li>
 						<NavLink to="/checkout" className={ ({ isActive }) => {
 							return isActive ? 'active' : '';
-						} } end onClick={ () => { dispatch(hideSidebar()); } }>
+						} } end onClick={ () => { dispatch(closeSidebar()); } }>
 							Checkout
 						</NavLink>
 					</li>
