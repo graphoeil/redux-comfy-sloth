@@ -4,7 +4,17 @@ import { FeaturedProducts, Hero, Services, Contact } from '../components';
 
 // Component
 const HomePage = () => {
-	return <h4>home page</h4>
+
+	// Return
+	return(
+		<main>
+			<Hero/>
+			<FeaturedProducts/>
+			<Services/>
+			<Contact/>
+		</main>
+	);
+
 };
 
 // Export

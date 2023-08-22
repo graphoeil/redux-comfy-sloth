@@ -7,7 +7,23 @@ import heroBcg2 from '../assets/hero-bcg-2.jpeg';
 
 // Export
 const Hero = () => {
-	return <h4>hero</h4>
+
+	// Return
+	return(
+		<Wrapper className="section-center">
+			<article className="center">
+				<h1>Design your<br/>comfort zone</h1>
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque dicta voluptas blanditiis ! 
+					Consectetur fuga magnam a repellendus esse, totam voluptatibus quisquam quam cupiditate.</p>
+				<Link to="/products" className="btn hero-btn">Shop now</Link>
+			</article>
+			<article className="img-container">
+				<img src={ heroBcg } alt="nice table" className="main-img"/>
+				<img src={ heroBcg2 } alt="person working" className="accent-img"/>
+			</article>
+		</Wrapper>
+	);
+
 };
 
 // Styled

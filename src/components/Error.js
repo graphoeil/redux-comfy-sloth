@@ -3,7 +3,10 @@ import React from 'react';
 
 // Component
 const Error = () => {
-	return <h4>error element</h4>
+
+	// Return
+	return <h4>error element</h4>;
+	
 };
 
 // Export

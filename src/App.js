@@ -1,11 +1,21 @@
 // Imports
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "./store/features/productsSlice";
 import { Navbar, Sidebar, Footer } from "./components";
 import { About, Cart, Checkout, Error, Home, PrivateRoute, Products, SingleProduct } from "./pages";
 
 // Component
 const App = () => {
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Fetch products
+	useEffect(() => {
+		dispatch(fetchProducts());
+	}, [dispatch]);
 
 	// Return
 	return(

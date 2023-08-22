@@ -6,8 +6,15 @@ import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 // Export
-const Product = () => {
-	return <h4>product</h4>
+const Product = ({ id, image, name, price }) => {
+
+	// Return
+	return(
+		<Wrapper>
+			{ name }
+		</Wrapper>
+	);
+
 };
 
 // Styled

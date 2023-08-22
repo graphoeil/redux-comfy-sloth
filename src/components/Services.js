@@ -5,7 +5,35 @@ import { services } from '../utils/constants';
 
 // Component
 const Services = () => {
-	return <h4>services </h4>
+	
+	// Return
+	return(
+		<Wrapper>
+			<div className="section-center">
+				<article className="header">
+					<h3>Custom furniture<br/>built only for you</h3>
+					<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis deleniti delectus 
+						possimus aut dignissimos repudiandae, at unde doloribus vel ipsam, ipsa amet 
+						consectetur adipisicing magnam ea ?</p>
+				</article>
+				<div className="services-center">
+					{
+						services.map((service) => {
+							const { id, icon, title, text } = service;
+							return(
+								<article key={ id } className="service">
+									<span className="icon">{ icon }</span>
+									<h4>{ title }</h4>
+									<p>{ text }</p>
+								</article>
+							);
+						})
+					}
+				</div>
+			</div>
+		</Wrapper>
+	);
+
 };
 
 // Styled

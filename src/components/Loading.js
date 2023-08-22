@@ -3,7 +3,14 @@ import React from 'react';
 
 // Component
 const Loading = () => {
-	return <h4>loading element</h4>
+
+	// Return
+	return(
+		<div className="section section-center">
+			<div className="loading"/>
+		</div>
+	);
+
 };
 
 // Export
