@@ -6,7 +6,28 @@ import aboutImg from '../assets/hero-bcg.jpeg';
 
 // Component
 const AboutPage = () => {
-	return <h4>about page</h4>
+
+	// Return
+	return(
+		<main>
+			<PageHero title="About"/>
+			<Wrapper className="page section section-center">
+				<img src={ aboutImg } alt="nice desk"/>
+				<article>
+					<div className="title">
+						<h2>Our story</h2>
+						<div className="underline"/>
+						<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam ea fuga in impedit voluptatem amet, 
+							explicabo accusantium fugiat consectetur dignissimos aliquid voluptate optio quaerat delectus. 
+							Quasi praesentium maiores eius rerum exercitationem temporibus vitae ad officiis possimus 
+							adipisci aspernatur omnis hic, architecto qui laboriosam sed. Vel vitae facilis ducimus, 
+							eveniet beatae officiis recusandae ?</p>
+					</div>
+				</article>
+			</Wrapper>
+		</main>
+	);
+
 };
 
 // Styled
