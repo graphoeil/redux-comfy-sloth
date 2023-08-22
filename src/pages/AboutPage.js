@@ -10,7 +10,7 @@ const AboutPage = () => {
 	// Return
 	return(
 		<main>
-			<PageHero title="About"/>
+			<PageHero title="about"/>
 			<Wrapper className="page section section-center">
 				<img src={ aboutImg } alt="nice desk"/>
 				<article>

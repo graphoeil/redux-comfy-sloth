@@ -7,7 +7,17 @@ import { Link } from 'react-router-dom';
 
 // Component
 const CheckoutPage = () => {
-	return <h4>checkout page</h4>
+
+	// Return
+	return(
+		<main>
+			<PageHero title="checkout"/>
+			<Wrapper className="page">
+				
+			</Wrapper>
+		</main>
+	);
+
 };
 
 // Styled
