@@ -11,7 +11,19 @@ const Product = ({ id, image, name, price }) => {
 	// Return
 	return(
 		<Wrapper>
-			{ name }
+			<div className="container">
+				<img src={ image } alt={ name }/>
+				<Link to={ `/products/${ id }` } className="link">
+					<FaSearch/>
+				</Link>
+			</div>
+			<footer>
+				<h5>{ name }</h5>
+				{/* !!! Attention, the price provided by the API is in cents, 
+				with Stripe it is easier to manage prices on the smallest 
+				unit of value possible!!! */}
+				<p>{ formatPrice(price) }</p>
+			</footer>
 		</Wrapper>
 	);
 

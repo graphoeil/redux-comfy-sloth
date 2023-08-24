@@ -1,7 +1,6 @@
 // Imports
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { products_url as url } from "../../utils/constants";
+import { fetchProductsThunkFn } from "./productsThunk";
 
 // Initial state
 const initialState = {
@@ -12,19 +11,28 @@ const initialState = {
 	productsError:false,
 	products:[],
 	filteredProducts:[],
-	featuredProducts:[]
+	featuredProducts:[],
 	// Single products
+	singleProductLoading:false,
+	singleProductError:false,
+	singleProduct:{},
+	// Filters
+	gridView:true,
+	sort:'price-lowest',
+	filters:{
+		text:'',
+		company:'all',
+		category:'all',
+		color:'all',
+		minPrice:0,
+		maxPrice:0,
+		price:0,
+		shipping:false
+	}
 };
 
 // Async methods
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async(_, thunkAPI) => {
-	try {
-		const response = await axios.get(url);
-		return response.data;
-	} catch (error){
-		console.log(error);
-	}
-});
+export const fetchProducts = createAsyncThunk('products/fetchProducts', fetchProductsThunkFn);
 
 // Slice
 const productsSlice = createSlice({
