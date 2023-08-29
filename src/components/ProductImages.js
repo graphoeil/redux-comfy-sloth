@@ -3,8 +3,28 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 // Component
-const ProductImages = () => {
-	return <h4>product images</h4>
+const ProductImages = ({ images }) => {
+
+	// Main image
+	const [main, setMain] = useState(images[0]);
+
+	// Return
+	return(
+		<Wrapper>
+			<img src={ main.url } alt="main" className="main"/>
+			<div className="gallery">
+				{
+					images.map((image, index) => {
+						const { url, thumbnails:{ large:{ url:largeURL } }, filename } = image;
+						return <img src={ url && largeURL } key={ index } alt={ filename } 
+							className={ url === main.url ? 'active' : '' } 
+							onClick={ () => { setMain(images[index]); } }/>;
+					})
+				}
+			</div>
+		</Wrapper>
+	);
+
 };
 
 // Styled
@@ -24,8 +44,8 @@ const Wrapper = styled.section`
 		grid-template-columns: repeat(5, 1fr);
 		column-gap: 1rem;
 		img {
-		height: 100px;
-		cursor: pointer;
+			height: 100px;
+			cursor: pointer;
 		}
 	}
 	.active {

@@ -6,8 +6,64 @@ import { FaCheck } from 'react-icons/fa';
 import AmountButtons from './AmountButtons';
 
 // Component
-const AddToCart = () => {
-	return <h4>addToCart</h4>
+const AddToCart = ({ product }) => {
+
+	// Variables
+	// colors is an array ['#000','#fa001']
+	const { id, stock, colors } = product;
+
+	// States
+	const [amount, setAmount] = useState(1);
+	const [mainColor, setMainColor] = useState(colors[0]);
+
+	// Cart buttons event
+	const increase = () => {
+		setAmount((oldAmount) => {
+			let tempAmount = oldAmount + 1;
+			if (tempAmount > stock){
+				tempAmount = stock;
+			}
+			return tempAmount;
+		});
+	};
+	const decrease = () => {
+		setAmount((oldAmount) => {
+			let tempAmount = oldAmount - 1;
+			if (tempAmount < 1){
+				tempAmount = 1;
+			}
+			return tempAmount;
+		});
+	};
+	
+	// Return
+	return(
+		<Wrapper>
+			<div className="colors">
+				<span>Colors : </span>
+				<div>
+					{
+						colors.map((color, index) => {
+							return(
+								<button type="button" key={ index } 
+									className={ `color-btn ${ mainColor === color ? 'active' : '' }` }
+									style={ { backgroundColor:color } } onClick={ () => { setMainColor(color); } }>
+									{ mainColor === color && <FaCheck/> }
+								</button>
+							);
+						})
+					}
+				</div>
+			</div>
+			<div className="btn-container">
+				<AmountButtons increase={ increase } decrease={ decrease } amount={ amount }/>
+				<Link to="/cart" className="btn" onClick={ () => { console.log('Add to cart : ' + id); } }>
+					Add to cart
+				</Link>
+			</div>
+		</Wrapper>
+	);
+
 };
 
 // Styled
@@ -50,7 +106,6 @@ const Wrapper = styled.section`
 	.btn-container {
 		margin-top: 2rem;
 	}
-
 	.btn {
 		margin-top: 1rem;
 		width: 140px;

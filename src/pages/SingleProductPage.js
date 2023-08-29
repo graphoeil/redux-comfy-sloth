@@ -1,6 +1,6 @@
 // Imports
 import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleProduct } from "../store/features/productsSlice";
@@ -25,9 +25,6 @@ const SingleProductPage = () => {
 		dispatch(fetchSingleProduct(`${ url }${ id }`));
 	}, [id, dispatch]);
 
-	// Single product data
-	const { id:sku, name, price, description, stock, stars, reviews, company, images } = product;
-
 	// Returns
 	if (loading){
 		return(
@@ -47,13 +44,33 @@ const SingleProductPage = () => {
 			</Wrapper>
 		)
 	}
+	// Single product data
+	const { id:sku, name, price, description, stock, stars, reviews, company, images } = product;
 	return(
 		<Wrapper>
-			<PageHero title={ name }/>
+			<PageHero title={ name } product/>
 			<div className="section section-center page">
 				<Link to="/products" className="btn">Back to products</Link>
 				<div className="product-center">
-
+					{ images?.length > 0 && <ProductImages images={ images }/> }
+					<section className="content">
+						<h2>{ name }</h2>
+						<Stars stars={ stars } reviews={ reviews }/>
+						<h5 className="price">{ formatPrice(price) }</h5>
+						<p className="description">{ description }</p>
+						<p className="info">
+							<span>Available :</span>
+							{ stock > 0 ? `${ stock } in stock` : 'Not available' }
+						</p>
+						<p className="info">
+							<span>SKU : </span>{ sku }
+						</p>
+						<p className="info">
+							<span>Brand :</span>{ company }
+						</p>
+						<hr />
+						{ stock > 0 && <AddToCart product={ product }/> }
+					</section>
 				</div>
 			</div>
 		</Wrapper>
