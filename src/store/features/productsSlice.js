@@ -1,6 +1,6 @@
 // Imports
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchProductsThunkFn } from "./productsThunk";
+import { fetchProductsThunkFn, fetchSingleProductThunkFn } from "./productsThunk";
 
 // Initial state
 const initialState = {
@@ -33,6 +33,7 @@ const initialState = {
 
 // Async methods
 export const fetchProducts = createAsyncThunk('products/fetchProducts', fetchProductsThunkFn);
+export const fetchSingleProduct = createAsyncThunk('products/fetchSingleProduct', fetchSingleProductThunkFn);
 
 // Slice
 const productsSlice = createSlice({
@@ -59,6 +60,15 @@ const productsSlice = createSlice({
 			return { ...state, productsLoading:false, products:payload, filteredProducts:payload, featuredProducts };
 		}).addCase(fetchProducts.rejected, (state) => {
 			return { ...state, productsLoading:false, productsError:true }
+		});
+		// Fetch single product
+		builder.addCase(fetchSingleProduct.pending, (state) => {
+			// In case there are old errors we reset singleProductError
+			return { ...state, singleProductLoading:true, singleProductError:false }
+		}).addCase(fetchSingleProduct.fulfilled, (state, { payload }) => {
+			return { ...state, singleProductLoading:false, singleProduct:payload };
+		}).addCase(fetchSingleProduct.rejected, (state) => {
+			return { ...state, singleProductLoading:false, singleProductError:true };
 		});
 	}
 });

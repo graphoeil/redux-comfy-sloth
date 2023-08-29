@@ -7,6 +7,7 @@ const Error = ({ redirect }) => {
 
 	// State
 	const [timer, setTimer] = useState(5);
+	const [text, setText] = useState('seconds');
 
 	// Countdown
 	const navigate = useNavigate();
@@ -16,6 +17,9 @@ const Error = ({ redirect }) => {
 			countDown = setTimeout(() => {
 				setTimer(timer - 1);
 			}, 1000);
+		}
+		if (timer === 1){
+			setText('second');
 		}
 		if (timer <= 0 && redirect){
 			navigate('/');
@@ -31,7 +35,7 @@ const Error = ({ redirect }) => {
 		<div className="section section-center text-center">
 			<h2>There was an error...</h2>
 			{
-				redirect && <h3>Redirect to homepage in { timer } seconds...</h3>
+				redirect && <h3>Redirect to homepage in { timer } { text }...</h3>
 			}
 		</div>
 	);
