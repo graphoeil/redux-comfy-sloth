@@ -5,8 +5,34 @@ import { formatPrice } from '../utils/helpers';
 import { Link } from 'react-router-dom';
 
 // Component
-const ListView = () => {
-	return <h4>list view</h4>
+const ListView = ({ products }) => {
+
+	// Return
+	return(
+		<Wrapper>
+			{
+				products.map((product) => {
+					// Variables
+					const { id, image, name, price, description } = product;
+					// Return
+					return(
+						<article key={ id }>
+							<img src={ image } alt={ name } />
+							<div>
+								<h4>{ name }</h4>
+								<h5 className="price">{ formatPrice(price) }</h5>
+								<p>{ description.substring(0, 150) }...</p>
+								<Link to={ `/products/${ id }` } className="btn">
+									Details
+								</Link>
+							</div>
+						</article>
+					);
+				})
+			}
+		</Wrapper>
+	);
+
 };
 
 // Styled

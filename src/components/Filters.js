@@ -6,7 +6,14 @@ import { FaCheck } from 'react-icons/fa';
 
 // Component
 const Filters = () => {
-	return <h4>filters</h4>
+
+	// Return
+	return(
+		<Wrapper>
+			
+		</Wrapper>
+	);
+
 };
 
 // Styled

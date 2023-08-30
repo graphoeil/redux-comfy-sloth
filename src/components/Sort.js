@@ -2,10 +2,46 @@
 import React from 'react';
 import { BsFillGridFill, BsList } from 'react-icons/bs';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from "react-redux";
+import { setGridView, setListView, updateSort } from "../store/features/productsSlice";
 
 // Component
 const Sort = () => {
-	return <h4>sort </h4>
+
+	// Store
+	const { filteredProducts:products, gridView, sort } = useSelector((store) => { return store.products; });
+
+	// Dispatch
+	const dispatch = useDispatch();
+	
+	// Return
+	return(
+		<Wrapper>
+			<div className="btn-container">
+				<button type="button" className={ gridView ? 'active' : '' } 
+					onClick={ () => { dispatch(setGridView()); } }>
+					<BsFillGridFill/>
+				</button>
+				<button type="button" className={ !gridView ? 'active' : '' } 
+					onClick={ () => { dispatch(setListView()); } }>
+					<BsList/>
+				</button>
+			</div>
+			<p>{ products.length } product{ products.length > 1 ? 's' : '' } found</p>
+			<hr />
+			<form>
+				<label htmlFor="sort">Sort by</label>
+				<select name="sort" id="sort" className="sort-input" 
+					value={ sort } onChange={ (e) => { dispatch(updateSort(e.target.value)); } }>
+					<option value="price-lowest">Price (lowest)</option>
+					<option value="price-highest">Price (highest)</option>
+					<option value="name-a">Name (a-z)</option>
+					<option value="name-z">Name (z-a)</option>
+				</select>
+			</form>
+		</Wrapper>
+	);
+
 };
 
 // Styled

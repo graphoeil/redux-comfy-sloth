@@ -1,11 +1,41 @@
 // Imports
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from "react-redux";
+import { sortProduct, filterProducts } from "../store/features/productsSlice";
 import { Filters, ProductList, Sort, PageHero } from '../components';
 
 // Component
 const ProductsPage = () => {
-	return <h4>products page</h4>
+
+	// Store
+	const { sort, filters } = useSelector((store) => { return store.products; });
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Sort products when sort or filters change in store
+	useEffect(() => {
+		dispatch(filterProducts());
+		dispatch(sortProduct());
+	}, [dispatch, sort, filters]);
+
+	// Return
+	return(
+		<main>
+			<PageHero title="Products"/>
+			<Wrapper className="page">
+				<div className="section-center products">
+					<Filters/>
+					<div>
+						<Sort/>
+						<ProductList/>
+					</div>
+				</div>
+			</Wrapper>
+		</main>
+	);
+
 };
 
 // Styled
