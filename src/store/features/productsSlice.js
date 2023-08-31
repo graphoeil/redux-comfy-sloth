@@ -96,12 +96,67 @@ const productsSlice = createSlice({
 			state.filteredProducts = tempProducts;
 		},
 		// Filters
-		updateFilters:(state, { payload }) => {
-
+		updateFilters:(state, { payload:{ name, value } }) => {
+			state.filters[name] = value;
+			// Or
+			// return { ...state, filters:{ ...state.filters, [name]:value } };
 		},
 		filterProducts:(state) => {
-			
-		}
+			// Always start from original products array
+			let tempProducts = [...state.products];
+			// Filters
+			const { text, category, company, color, price, shipping } = state.filters;
+			// Text
+			if (text){
+				tempProducts = tempProducts.filter((product) => {
+					return product.name.toLowerCase().startsWith(text);
+				});
+			}
+			// Category
+			if (category !== 'all'){
+				tempProducts = tempProducts.filter((product) => {
+					return product.category.toLowerCase() === category;
+				});
+			}
+			// Company
+			if (company !== 'all'){
+				tempProducts = tempProducts.filter((product) => {
+					return product.company.toLowerCase() === company;
+				});
+			}
+			// Color
+			if (color !== 'all'){
+				tempProducts = tempProducts.filter((product) => {
+					// product.colors is an array
+					return product.colors.find((col) => {
+						return col === color;
+					});
+				});
+			}
+			// Price
+			tempProducts = tempProducts.filter((product) => {
+				return product.price <= price;
+			});
+			// Shipping
+			if (shipping){
+				tempProducts = tempProducts.filter((product) => {
+					return product.shipping;
+				});
+			}
+			// Return
+			return { ...state, filteredProducts:tempProducts };
+		},
+		clearFilters:(state) => {
+			return { ...state, filters:{
+				...state.filters,
+				text:'',
+				company:'all',
+				category:'all',
+				color:'all',
+				price:state.filters.maxPrice,
+				shipping:false
+			} };
+		},
 	},
 	extraReducers:(builder) => {
 		// Fetch products
@@ -137,7 +192,7 @@ const productsSlice = createSlice({
 
 // Actions export
 export const { openSidebar, closeSidebar, setGridView, setListView, 
-	updateSort, sortProduct, updateFilters, filterProducts } = productsSlice.actions;
+	updateSort, sortProduct, updateFilters, filterProducts, clearFilters } = productsSlice.actions;
 
 // Reducer export
 export default productsSlice.reducer;

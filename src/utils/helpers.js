@@ -7,6 +7,13 @@ export const formatPrice = (price) => {
 };
 
 // Get unique values
-export const getUniqueValues = () => {
-
+export const getUniqueValues = (data, type) => {
+	let unique = data.map((item) => {
+		return item[type];
+	});
+	if (type === 'colors'){
+		// Becase initialy colors is an array of array
+		unique = unique.flat();
+	}
+	return ['all', ...new Set(unique)];
 };
