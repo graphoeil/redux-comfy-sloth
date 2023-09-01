@@ -1,12 +1,32 @@
 // Imports
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
 import { CartContent, PageHero } from '../components';
 
 // Component
 const CartPage = () => {
-	return <h4>cart page</h4>
+
+	// Store
+	const { cart } = useSelector((store) => { return store.cart; });
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Save cart to localStorage and calculate 
+	// cart total everytime cart changes
+	useEffect(() => {
+
+	}, [dispatch, cart]);
+
+	// Returns
+	return(
+		<Wrapper>
+			
+		</Wrapper>
+	);
+
 };
 
 // Export

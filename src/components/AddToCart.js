@@ -3,10 +3,15 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/features/cartSlice";
 import AmountButtons from './AmountButtons';
 
 // Component
 const AddToCart = ({ product }) => {
+
+	// Dispatch
+	const dispatch = useDispatch();
 
 	// Variables
 	// colors is an array ['#000','#fa001']
@@ -57,7 +62,7 @@ const AddToCart = ({ product }) => {
 			</div>
 			<div className="btn-container">
 				<AmountButtons increase={ increase } decrease={ decrease } amount={ amount }/>
-				<Link to="/cart" className="btn" onClick={ () => { console.log('Add to cart : ' + id); } }>
+				<Link to="/cart" className="btn" onClick={ () => { dispatch(addToCart({ id, color:mainColor, amount, product })) } }>
 					Add to cart
 				</Link>
 			</div>
