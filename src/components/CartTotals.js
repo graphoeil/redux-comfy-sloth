@@ -1,12 +1,42 @@
 // Imports
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from "react-redux";
 import { formatPrice } from '../utils/helpers';
 import { Link } from 'react-router-dom';
 
 // Component
 const CartTotals = () => {
-	return <h4>cart totals</h4>
+
+	// Store
+	const { totalAmount, shippingFee } = useSelector((store) => { return store.cart; });
+
+	// Dispatch
+	const dispatch = useDispatch();
+	
+	// Return
+	return(
+		<Wrapper>
+			<div>
+				<article>
+					<h5>
+						Subtotal : <span>{ formatPrice(totalAmount) }</span>
+					</h5>
+					<p>
+						Shipping fee : <span>{ formatPrice(shippingFee) }</span>
+					</p>
+					<hr />
+					<h4>
+						Order total : <span>{ formatPrice(totalAmount + shippingFee) }</span>
+					</h4>
+				</article>
+				<Link to="/checkout" className="btn">
+					Proceed to checkout
+				</Link>
+			</div>
+		</Wrapper>
+	);
+	
 };
 
 // Styled

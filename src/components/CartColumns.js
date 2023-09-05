@@ -4,7 +4,22 @@ import styled from 'styled-components';
 
 // Component
 const CartColumns = () => {
-	return <h4>cart columns</h4>
+	
+	// Return
+	return(
+		<Wrapper>
+			<div className="content">
+				<h5>Item</h5>
+				<h5>Price</h5>
+				<h5>Quantity</h5>
+				<h5>Subtotal</h5>
+				{/* Empty span => trash icon */}
+				<span/>
+			</div>
+			<hr />
+		</Wrapper>
+	);
+	
 };
 
 // Styled

@@ -1,13 +1,25 @@
 // Imports
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from "react-redux";
+import { amountChange, removeItem } from "../store/features/cartSlice";
 import { formatPrice } from '../utils/helpers';
 import AmountButtons from './AmountButtons';
 import { FaTrash } from 'react-icons/fa';
 
 // Component
-const CartItem = () => {
-	return <h4>cart item</h4>
+const CartItem = ({  }) => {
+
+	// Dispatch
+	const dispatch = useDispatch();
+	
+	// Return
+	return(
+		<Wrapper>
+			CartItem
+		</Wrapper>
+	);
+	
 };
 
 // Styled

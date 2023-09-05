@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
+import { calculateTotals } from "../store/features/cartSlice";
 import { CartContent, PageHero } from '../components';
 
 // Component
@@ -17,14 +18,30 @@ const CartPage = () => {
 	// Save cart to localStorage and calculate 
 	// cart total everytime cart changes
 	useEffect(() => {
-
+		localStorage.setItem('comflySlothRedux', JSON.stringify(cart));
+		dispatch(calculateTotals());
 	}, [dispatch, cart]);
 
 	// Returns
+	if (cart.length < 1){
+		return(
+			<Wrapper className="page-100">
+				<div className="empty">
+					<h2>Your cart is empty...</h2>
+					<Link to="/products" className="btn">
+						Fill it !
+					</Link>
+				</div>
+			</Wrapper>
+		)
+	}
 	return(
-		<Wrapper>
-			
-		</Wrapper>
+		<main>
+			<PageHero title="Cart"/>
+			<Wrapper className="page">
+				<CartContent/>
+			</Wrapper>
+		</main>
 	);
 
 };

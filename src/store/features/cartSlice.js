@@ -1,11 +1,18 @@
 // Imports
 import { createSlice } from "@reduxjs/toolkit";
 
-// LocalStorage
+// LocalStorage ?
+const getLocalStorage  = () => {
+	const cart = localStorage.getItem('comflySlothRedux');
+	if (cart){
+		return JSON.parse(cart);
+	}
+	return [];
+};
 
 // Initial state
 const initialState = {
-	cart:[],
+	cart:getLocalStorage(),
 	totalItems:0,
 	totalAmount:0,
 	shippingFee:534
@@ -50,14 +57,27 @@ const cartSlice = createSlice({
 			}
 		},
 		// Amount change
+		amountChange:(state, { payload:{ id, value } }) => {
+
+		},
 		// Remove from cart
+		removeItem:(state, { payload:{ id } }) => {
+
+		},
 		// Clear cart
+		clearCart:(state) => {
+			state.cart = [];
+		},
 		// Calculate totals
+		calculateTotals:(state) => {
+			
+		}
 	}
 });
 
 // Actions export
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, amountChange, removeItem, 
+	clearCart, calculateTotals } = cartSlice.actions;
 
 // Reducer export
 export default cartSlice.reducer;

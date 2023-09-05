@@ -2,13 +2,44 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { clearCart } from "../store/features/cartSlice";
 import CartColumns from './CartColumns';
 import CartItem from './CartItem';
 import CartTotals from './CartTotals';
 
 // Component
 const CartContent = () => {
-	return <h4>cart content</h4>
+
+	// Store
+	const { cart } = useSelector((store) => { return store.cart; });
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Return
+	return(
+		<Wrapper className="section section-center">
+			<CartColumns/>
+			{
+				cart.map((item) => {
+					return <CartItem key={ item.id } { ...item }/>
+				})
+			}
+			<hr />
+			<div className="link-container">
+				<Link to="/products" className="link-btn">
+					Continue shopping
+				</Link>
+				<button type="button" className="link-btn clear-btn" 
+					onClick={ () => { dispatch(clearCart()); } }>
+					Clear cart
+				</button>
+			</div>
+			<CartTotals/>
+		</Wrapper>
+	);
+
 };
 
 // Styled
