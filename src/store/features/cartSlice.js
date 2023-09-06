@@ -58,11 +58,32 @@ const cartSlice = createSlice({
 		},
 		// Amount change
 		amountChange:(state, { payload:{ id, value } }) => {
-
+			const tempCart = state.cart.map((item) => {
+				if (item.id === id){
+					if (value === 'inc'){
+						let newAmount = item.amount + 1;
+						if (newAmount > item.max){
+							newAmount = item.max;
+						}
+						return { ...item, amount:newAmount };
+					} else {
+						let newAmount = item.amount - 1;
+						if (newAmount < 1){
+							newAmount = 1;
+						}
+						return { ...item, amount:newAmount };
+					}
+				} else {
+					return item;
+				}
+			});
+			state.cart = tempCart;
 		},
 		// Remove from cart
-		removeItem:(state, { payload:{ id } }) => {
-
+		removeItem:(state, { payload:id }) => {
+			state.cart = state.cart.filter((item) => {
+				return item.id !== id;
+			});
 		},
 		// Clear cart
 		clearCart:(state) => {
@@ -70,7 +91,14 @@ const cartSlice = createSlice({
 		},
 		// Calculate totals
 		calculateTotals:(state) => {
-			
+			const { totalItems, totalAmount } = state.cart.reduce((acc, current) => {
+				const { amount, price } = current;
+				acc.totalItems += amount;
+				acc.totalAmount += amount * price;
+				// !!!! Don't forget to return accumulation !!!!
+				return acc;
+			}, { totalItems:0, totalAmount:0 });
+			return { ...state, totalItems, totalAmount };
 		}
 	}
 });

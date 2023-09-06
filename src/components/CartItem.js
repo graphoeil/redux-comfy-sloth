@@ -8,15 +8,39 @@ import AmountButtons from './AmountButtons';
 import { FaTrash } from 'react-icons/fa';
 
 // Component
-const CartItem = ({  }) => {
+const CartItem = ({ id, image, name, color, price, amount }) => {
 
 	// Dispatch
 	const dispatch = useDispatch();
+
+	// Increase & decrease
+	const increase = () => {
+		dispatch(amountChange({ id, value:'inc' }));
+	};
+	const decrease = () => {
+		dispatch(amountChange({ id, value:'dec' }));
+	};
 	
 	// Return
 	return(
 		<Wrapper>
-			CartItem
+			<div className="title">
+				<img src={ image } alt={ name } />
+				<div>
+					<h5 className="name">{ name }</h5>
+					<p className="color">
+						Color : <span style={ { backgroundColor:color } }/>
+					</p>
+					{/* price-small, visible only on mobile */}
+					<h5 className="price-small">{ formatPrice(price) }</h5>
+				</div>
+			</div>
+			<h5 className="price">{ formatPrice(price) }</h5>
+			<AmountButtons amount={ amount } increase={ increase } decrease={ decrease }/>
+			<h5 className="subtotal">{ formatPrice(price * amount) }</h5>
+			<button type="button" className="remove-btn" onClick={ () => { dispatch(removeItem(id)); } }>
+				<FaTrash/>
+			</button>
 		</Wrapper>
 	);
 	

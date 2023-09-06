@@ -9,6 +9,9 @@ import { closeSidebar } from "../store/features/productsSlice";
 // Components
 const CartButtons = () => {
 
+	// Store
+	const { totalItems } = useSelector((store) => { return store.cart; });
+
 	// Dispatch
 	const dispatch = useDispatch();
 
@@ -22,7 +25,7 @@ const CartButtons = () => {
 				Cart
 				<span className="cart-container">
 					<FaShoppingCart/>
-					<span className="cart-value">10</span>
+					<span className="cart-value">{ totalItems }</span>
 				</span>
 			</Link>
 			<button type="button" className="auth-btn">
