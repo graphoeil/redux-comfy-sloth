@@ -1,9 +1,8 @@
 // Imports
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from "react-redux";
-import { calculateTotals } from "../store/features/cartSlice";
+import { useSelector } from "react-redux";
 import { CartContent, PageHero } from '../components';
 
 // Component
@@ -11,16 +10,6 @@ const CartPage = () => {
 
 	// Store
 	const { cart } = useSelector((store) => { return store.cart; });
-
-	// Dispatch
-	const dispatch = useDispatch();
-
-	// Save cart to localStorage and calculate 
-	// cart total everytime cart changes
-	useEffect(() => {
-		localStorage.setItem('comflySlothRedux', JSON.stringify(cart));
-		dispatch(calculateTotals());
-	}, [dispatch, cart]);
 
 	// Returns
 	if (cart.length < 1){

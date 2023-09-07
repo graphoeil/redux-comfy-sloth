@@ -1,13 +1,17 @@
 // Imports
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { calculateTotals } from "./store/features/cartSlice";
 import { fetchProducts } from "./store/features/productsSlice";
 import { Navbar, Sidebar, Footer } from "./components";
 import { About, Cart, Checkout, Error, Home, PrivateRoute, Products, SingleProduct } from "./pages";
 
 // Component
 const App = () => {
+
+	// Store
+	const { cart } = useSelector((store) => { return store.cart; });
 
 	// Dispatch
 	const dispatch = useDispatch();
@@ -16,6 +20,13 @@ const App = () => {
 	useEffect(() => {
 		dispatch(fetchProducts());
 	}, [dispatch]);
+
+	// Save cart to localStorage and calculate 
+	// cart total everytime cart changes
+	useEffect(() => {
+		localStorage.setItem('comflySlothRedux', JSON.stringify(cart));
+		dispatch(calculateTotals());
+	}, [dispatch, cart]);
 
 	// Return
 	return(
