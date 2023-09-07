@@ -1,7 +1,7 @@
 // Imports
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { amountChange, removeItem } from "../store/features/cartSlice";
 import { formatPrice } from '../utils/helpers';
 import AmountButtons from './AmountButtons';
@@ -9,6 +9,9 @@ import { FaTrash } from 'react-icons/fa';
 
 // Component
 const CartItem = ({ id, image, name, color, price, amount }) => {
+
+	// Store
+	const { cart } = useSelector((store) => { return store.cart; });
 
 	// Dispatch
 	const dispatch = useDispatch();
@@ -18,7 +21,23 @@ const CartItem = ({ id, image, name, color, price, amount }) => {
 		dispatch(amountChange({ id, value:'inc' }));
 	};
 	const decrease = () => {
-		dispatch(amountChange({ id, value:'dec' }));
+		const newCart = cart.map((item) => {
+			if (item.id === id){
+				let newAmount = item.amount - 1;
+				return { ...item, amount:newAmount };
+			} else {
+				return item;
+			}
+		});
+		newCart.forEach((item) => {
+			if (item.id === id){
+				if (item.amount <= 0){
+					dispatch(removeItem(id));
+				} else {
+					dispatch(amountChange({ id, value:'dec' }));
+				}
+			}
+		});
 	};
 	
 	// Return
