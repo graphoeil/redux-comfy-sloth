@@ -19,6 +19,7 @@ const Sidebar = () => {
 
 	// Store
 	const { isSidebarOpen } = useSelector((store) => { return store.products; });
+	const { myUser } = useSelector((store) => { return store.user; });
 
 	// Dispatch
 	const dispatch = useDispatch();
@@ -48,13 +49,15 @@ const Sidebar = () => {
 							);
 						})
 					}
-					<li>
-						<NavLink to="/checkout" className={ ({ isActive }) => {
-							return isActive ? 'active' : '';
-						} } end onClick={ () => { dispatch(closeSidebar()); } }>
-							Checkout
-						</NavLink>
-					</li>
+					{
+						myUser && <li>
+							<NavLink to="/checkout" className={ ({ isActive }) => {
+								return isActive ? 'active' : '';
+							} } end onClick={ () => { dispatch(closeSidebar()); } }>
+								Checkout
+							</NavLink>
+						</li>
+					}
 				</ul>
 				<CartButtons/>
 			</aside>

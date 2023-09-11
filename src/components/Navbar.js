@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openSidebar } from "../store/features/productsSlice";
 import { links } from '../utils/constants';
 import logo from '../assets/logo.svg';
@@ -11,6 +11,9 @@ import CartButtons from './CartButtons';
 
 // Component
 const Nav = () => {
+
+	// Store
+	const { myUser } = useSelector((store) => { return store.user; });
 
 	// Dispatch
 	const dispatch = useDispatch();
@@ -42,13 +45,15 @@ const Nav = () => {
 							);
 						})
 					}
-					<li>
-						<NavLink to="/checkout" className={ ({ isActive }) => {
-							return isActive ? 'active' : '';
-						} } end>
-							Checkout
-						</NavLink>
-					</li>
+					{
+						myUser && <li>
+							<NavLink to="/checkout" className={ ({ isActive }) => {
+								return isActive ? 'active' : '';
+							} } end>
+								Checkout
+							</NavLink>
+						</li>
+					}
 				</ul>
 				<CartButtons/>
 			</div>

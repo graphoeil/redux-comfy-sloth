@@ -1,7 +1,8 @@
 // Imports
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useAuth0 } from "@auth0/auth0-react";
 import { formatPrice } from '../utils/helpers';
 import { Link } from 'react-router-dom';
 
@@ -10,9 +11,10 @@ const CartTotals = () => {
 
 	// Store
 	const { totalAmount, shippingFee } = useSelector((store) => { return store.cart; });
-
-	// Dispatch
-	const dispatch = useDispatch();
+	const { myUser } = useSelector((store) => { return store.user; });
+	
+	// Auth0 login
+	const { loginWithRedirect } = useAuth0();
 	
 	// Return
 	return(
@@ -30,9 +32,15 @@ const CartTotals = () => {
 						Order total : <span>{ formatPrice(totalAmount + shippingFee) }</span>
 					</h4>
 				</article>
-				<Link to="/checkout" className="btn">
-					Proceed to checkout
-				</Link>
+				{
+					myUser
+					? <Link to="/checkout" className="btn">
+						Proceed to checkout
+					</Link>
+					: <button type="button" className="btn" onClick={ loginWithRedirect }>
+						Login to checkout
+					</button>
+				}
 			</div>
 		</Wrapper>
 	);

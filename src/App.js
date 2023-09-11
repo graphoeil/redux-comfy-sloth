@@ -1,9 +1,11 @@
 // Imports
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch, useSelector } from "react-redux";
 import { calculateTotals } from "./store/features/cartSlice";
 import { fetchProducts } from "./store/features/productsSlice";
+import { setMyUser } from "./store/features/userSlice";
 import { Navbar, Sidebar, Footer } from "./components";
 import { About, Cart, Checkout, Error, Home, PrivateRoute, Products, SingleProduct } from "./pages";
 
@@ -27,6 +29,12 @@ const App = () => {
 		localStorage.setItem('comflySlothRedux', JSON.stringify(cart));
 		dispatch(calculateTotals());
 	}, [dispatch, cart]);
+
+	// User connected ?
+	const { user, isAuthenticated } = useAuth0();
+	useEffect(() => {
+		dispatch(setMyUser(user));
+	}, [isAuthenticated, dispatch, user]);
 
 	// Return
 	return(
@@ -64,7 +72,9 @@ const App = () => {
 				{/* Single product */}
 
 				{/* Checkout */}
-				<Route path="/checkout" element={ <Checkout/> }/>
+				<Route path="/checkout" element={ <PrivateRoute>
+					<Checkout/>
+				</PrivateRoute> }/>
 				{/* Checkout */}
 
 				{/* Error 404 */}

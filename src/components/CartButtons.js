@@ -3,6 +3,7 @@ import React from 'react';
 import { FaShoppingCart, FaUserMinus, FaUserPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAuth0 } from "@auth0/auth0-react";
 import { useSelector, useDispatch } from "react-redux";
 import { closeSidebar } from "../store/features/productsSlice";
 
@@ -11,9 +12,13 @@ const CartButtons = () => {
 
 	// Store
 	const { totalItems } = useSelector((store) => { return store.cart; });
+	const { myUser } = useSelector((store) => { return store.user; });
 
 	// Dispatch
 	const dispatch = useDispatch();
+
+	// Auth0 login
+	const { loginWithRedirect, logout } = useAuth0();
 
 	// Return
 	return(
@@ -28,9 +33,20 @@ const CartButtons = () => {
 					<span className="cart-value">{ totalItems }</span>
 				</span>
 			</Link>
-			<button type="button" className="auth-btn">
-				Login <FaUserPlus/>
-			</button>
+			{
+				myUser
+				? <button type="button" className="auth-btn" 
+					onClick={ () => {
+						// Clear cart ?...
+						// We must pass redirection to logout
+						logout({ returnTo:window.location.origin });
+					} }>
+					Logout <FaUserMinus/>
+				</button>
+				: <button type="button" className="auth-btn" onClick={ loginWithRedirect }>
+					Login <FaUserPlus/>
+				</button>
+			}
 		</Wrapper>
 	);
 
