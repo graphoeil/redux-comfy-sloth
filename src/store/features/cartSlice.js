@@ -73,9 +73,8 @@ const cartSlice = createSlice({
 						}
 						return { ...item, amount:newAmount };
 					}
-				} else {
-					return item;
 				}
+				return item;
 			});
 			state.cart = tempCart;
 		},
