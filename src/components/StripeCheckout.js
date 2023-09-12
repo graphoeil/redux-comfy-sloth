@@ -2,31 +2,201 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { loadStripe } from '@stripe/stripe-js';
-import {
-  CardElement,
-  useStripe,
-  Elements,
-  useElements,
-} from '@stripe/react-stripe-js';
+import { CardElement, useStripe, Elements, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { formatPrice } from '../utils/helpers';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart } from "../store/features/cartSlice";
 
-// Checkout form
-const CheckoutForm = () => {
-	return <h4>hello from Stripe Checkout</h4>
-};
+/* StripeCheckout component does not communicate with @stripe
+for security reasons we go through the functions
+netlify contained in the functions folder (hello.js) */
 
-// Component
+/* loadStripe, connects to stripe, returns a promise 
+that we pass as props to the Elements component */
+const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
+// Stripe component (Main)
 const StripeCheckout = () => {
-	return (
+
+	// Return
+	return(
 		<Wrapper>
-			<CheckoutForm />
+			<Elements stripe={ promise }>
+				<CheckoutForm />
+			</Elements>
 		</Wrapper>
 	);
+	
 };
 
-// Styled
+// Checkout form component
+const CheckoutForm = () => {
+
+	// Store
+	const { cart, totalAmount, shippingFee } = useSelector((store) => { return store.cart; });
+	const { myUser } = useSelector((store) => { return store.user; });
+
+	// Dispatch
+	const dispatch = useDispatch();
+
+	// Stripe state
+	const [succeeded, setSucceeded] = useState(false);
+	const [error, setError] = useState(null);
+	const [processing, setProcessing] = useState('');
+	const [disabled, setDisabled] = useState(true);
+	const [clientSecret, setClientSecret] = useState('');
+
+	// Stripe methods
+	const stripe = useStripe();
+	const elements = useElements();
+
+	// CardStyles, to inject as props into CardElement
+	const cardStyles = {
+		style:{
+			base:{
+				color:'#32325d',
+				fontFamily:'Arial, sans-serif',
+				fontSmoothing:'antialiased',
+				fontSize:'16px',
+				'::placeholder':{
+					color:'#32325d'
+				}
+			},
+			invalid:{
+				color:'#fa755a',
+				iconColor:'#fa755a'
+			}
+		}
+	};
+
+	// payment method
+	const createPaymentIntent = async() => {
+		// Send request to ../functions/create-payment-intent.js
+		try {
+			const data = await axios.post('/.netlify/functions/create-payment-intent', JSON.stringify({
+				cart, shippingFee, totalAmount
+			}));
+			setClientSecret(data.data.clientSecret);
+		} catch(error){
+			// console.log(error.response);
+		}
+	};
+	useEffect(() => {
+		createPaymentIntent();
+		// eslint-disable-next-line
+	},[]);
+
+	// Inputs change and submit form
+	const navigate = useNavigate();
+	const handleChange = async(e) => {
+		/* Stripe states */
+		setDisabled(e.empty);
+		setError(e.error ? e.error.message : '');
+	};
+	const handleSubmit = async(e) => {
+		e.preventDefault();
+		/* Stripe states */
+		setProcessing(true);
+		// Send request to stripe
+		const payload = await stripe.confirmCardPayment(clientSecret, {
+			payment_method:{
+				card:elements.getElement(CardElement)
+			}
+		});
+		if (payload.error){
+			setError(`Payment failed ${ payload.error.message }`);
+			setProcessing(false);
+		} else {
+			setError(null);
+			setProcessing(false);
+			setSucceeded(true);
+		}
+	};
+
+	// Countdown
+	const [timer, setTimer] = useState(5);
+	const [text, setText] = useState('seconds');
+	useEffect(() => {
+		if (succeeded){
+			let countDown;
+			if (timer >= 1){
+				countDown = setTimeout(() => {
+					setTimer(timer - 1);
+				}, 1000);
+			}
+			if (timer === 1){
+				setText('second');
+			}
+			if (timer <= 0){
+				// Clear cart
+				dispatch(clearCart());
+				// Back to homepage
+				navigate('/');
+			}
+			// Clean up
+			return() => {
+				clearTimeout(countDown);
+			}
+		}
+	}, [timer, navigate, succeeded, dispatch]);
+
+	// Return
+	return(
+		<div>
+			{
+				succeeded ? <article>
+					<h4>Thank you</h4>
+					<h5>Your payment was successful !</h5>
+					<p>Redirect to homepage in { timer } { text }...</p>
+				</article> : <article>
+					<h4>Hello, { myUser && myUser.nickname }</h4>
+					<h5>Your total is { formatPrice(shippingFee + totalAmount) }</h5>
+					<p>Test card number : 4242 4242 4242 4242</p>
+				</article>
+			}
+			<form id="payment-form" onSubmit={ handleSubmit }>
+				<CardElement id="card-element" options={ cardStyles } 
+					onChange={ handleChange }/>
+				<button disabled={ processing || disabled || succeeded } 
+					id="submit">
+					<span id="button-text">
+						{
+							processing ? <div className="spinner" id="spinner"/> : 'Pay'
+						}
+					</span>
+				</button>
+
+				{/* Error */}
+				{
+					error && <div className="card-error" role="alert">
+						{ error }
+					</div>
+				}
+				{/* Error */}
+
+				{/* Sucess */}
+				<p className={ `result-message ${ succeeded ? '' : 'hidden' }` }>
+					Payment succeeded, see the result in 
+					your <a href={ `https://dashboard.stripe.com/test/payments` } 
+						target="_blank" 
+						rel="noopener noreferrer">
+						Stripe dashboard
+					</a>.
+					Refresh the page to pay again.
+				</p>
+				{/* Sucess */}
+
+			</form>
+		</div>
+	);
+
+};
+
+// Styled components
+/* Styles come directly from stripe :
+https://stripe.com/docs/payments/quickstart */
 const Wrapper = styled.section`
 	form {
 		width: 30vw;
@@ -103,7 +273,9 @@ const Wrapper = styled.section`
 		cursor: default;
 	}
 	/* spinner/processing state, errors */
-	.spinner, .spinner:before, .spinner:after {
+	.spinner,
+	.spinner:before,
+	.spinner:after {
 		border-radius: 50%;
 	}
 	.spinner {
@@ -119,7 +291,8 @@ const Wrapper = styled.section`
 		-ms-transform: translateZ(0);
 		transform: translateZ(0);
 	}
-	.spinner:before, .spinner:after {
+	.spinner:before,
+	.spinner:after {
 		position: absolute;
 		content: '';
 	}
@@ -149,17 +322,17 @@ const Wrapper = styled.section`
 	}
 	@keyframes loading {
 		0% {
-			-webkit-transform: rotate(0deg);
-			transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
 		}
 		100% {
-			-webkit-transform: rotate(360deg);
-			transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
 		}
 	}
 	@media only screen and (max-width: 600px) {
 		form {
-			width: 80vw;
+		width: 80vw;
 		}
 	}
 `;
