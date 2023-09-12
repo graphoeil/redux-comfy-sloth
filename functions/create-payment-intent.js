@@ -1,14 +1,14 @@
-/* Le package dotenv (npm i dotenv) permet de récupérer les fichiers
-.env dans un environnement node, donc en dehors de react. */
+/* The dotenv package (npm i dotenv) allows you to recover files
+.env in a node environment, therefore outside of react. */
 require('dotenv').config();
 
-// Connexion à stripe
+// Stripe connexion
 const stripe = require('stripe')(process.env.REACT_APP_STRIPE_SECRET_KEY);
 
 // http://localhost:8888/.netlify/functions/create-payment-intent
 
-/* Cette fonction fait la jonction entre le paiement stripe
-et notre composant StripeCheckout via une requête post */
+/* This function makes the connection between the payment stripe
+and our StripeCheckout component via a post request */
 
 // Export
 exports.handler = async function(event, context){
@@ -20,10 +20,9 @@ exports.handler = async function(event, context){
 		{"id":"recoM2MyHJGHLVi5l#000","name":"bar stool","color":"#000","amount":1,"image":"https://dl.airtable.com/.attachments/7442c132471b205b0883929efd5a96af/16a65ea6/z-0-product.jpg","price":4099,"max":20}],
 		"shippingFee":534,"totalAmount":7198}' */
 
-	/* Nous testons si les données sont bien récupérées, au cas où 
-	nous accéderions directement via 
-	l'url // http://localhost:8888/.netlify/functions/create-payment-intent 
-	alors que l'envoi se fait via axios dans le composant StripeCheckout. */
+	/* We test if the data is correctly recovered, just in case we would access directly : 
+	// http://localhost:8888/.netlify/functions/create-payment-intent 
+	while sending is done via axios in the StripeCheckout component ;-) */
 	if (event.body){
 
 		// Variables
@@ -37,8 +36,8 @@ exports.handler = async function(event, context){
 		// Try, catch
 		try {
 			const paymentIntent = await stripe.paymentIntents.create({
-				/* La valeur doit être en centimes (ou cents), voilà
-				pourquoi nous avons développé toute l'application en cents ,-) */
+				/* The value must be in centimes (or cents), that's it 
+				why we developed the whole app in cents ,-) */
 				amount:calculateOrderAmount(),
 				currency:'usd'
 			});
@@ -57,7 +56,7 @@ exports.handler = async function(event, context){
 
 	}
 
-	// Return par défaut
+	// Default return
 	return {
 		statusCode:200,
 		body:'Create Payment Intent'
