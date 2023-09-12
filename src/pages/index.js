@@ -1,5 +1,6 @@
 // Imports
 import About from "./AboutPage";
+import AuthWrapper from "./AuthWrapper";
 import Cart from "./CartPage";
 import Checkout from "./CheckoutPage";
 import Error from "./ErrorPage";
@@ -12,6 +13,7 @@ import SingleProduct from "./SingleProductPage";
 // Export
 export {
 	About,
+	AuthWrapper,
 	Cart,
 	Checkout,
 	Error,

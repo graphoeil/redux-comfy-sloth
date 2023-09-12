@@ -7,7 +7,8 @@ import { calculateTotals } from "./store/features/cartSlice";
 import { fetchProducts } from "./store/features/productsSlice";
 import { setMyUser } from "./store/features/userSlice";
 import { Navbar, Sidebar, Footer } from "./components";
-import { About, Cart, Checkout, Error, Home, PrivateRoute, Products, SingleProduct } from "./pages";
+import { About, AuthWrapper, Cart, Checkout, Error, Home, 
+	PrivateRoute, Products, SingleProduct } from "./pages";
 
 // Component
 const App = () => {
@@ -31,64 +32,73 @@ const App = () => {
 	}, [dispatch, cart]);
 
 	// User connected ?
-	const { user, isAuthenticated } = useAuth0();
+	const { user } = useAuth0();
 	useEffect(() => {
 		dispatch(setMyUser(user));
-	}, [isAuthenticated, dispatch, user]);
+	}, [dispatch, user]);
 
 	// Return
 	return(
-		<Router>
+		// AuthWrapper for managing auth0 loading or error message...
+		// If we don't wrap our app in AuthWrapper and go to http://localhost:3000/checkout
+		// manually in the url bar, private route component will redirect us to homepage
+		<AuthWrapper>
+
+			{/* Router */}
+			<Router>
 			
-			{/* Navbar */}
-			<Navbar/>
-			{/* Navbar */}
+				{/* Navbar */}
+				<Navbar/>
+				{/* Navbar */}
 
-			{/* Sidebar */}
-			<Sidebar/>
-			{/* Sidebar */}
+				{/* Sidebar */}
+				<Sidebar/>
+				{/* Sidebar */}
 
-			{/* Routes */}
-			<Routes>
+				{/* Routes */}
+				<Routes>
 
-				{/* Home */}
-				<Route path="/" element={ <Home/> }/>
-				{/* Home */}
+					{/* Home */}
+					<Route path="/" element={ <Home/> }/>
+					{/* Home */}
 
-				{/* About */}
-				<Route path="/about" element={ <About/> }/>
-				{/* About */}
+					{/* About */}
+					<Route path="/about" element={ <About/> }/>
+					{/* About */}
 
-				{/* Cart */}
-				<Route path="/cart" element={ <Cart/> }/>
-				{/* Cart */}
+					{/* Cart */}
+					<Route path="/cart" element={ <Cart/> }/>
+					{/* Cart */}
 
-				{/* Products */}
-				<Route path="/products" element={ <Products/> }/>
-				{/* Products */}
+					{/* Products */}
+					<Route path="/products" element={ <Products/> }/>
+					{/* Products */}
 
-				{/* Single product */}
-				<Route path="/products/:id" element={ <SingleProduct/> }/>
-				{/* Single product */}
+					{/* Single product */}
+					<Route path="/products/:id" element={ <SingleProduct/> }/>
+					{/* Single product */}
 
-				{/* Checkout */}
-				<Route path="/checkout" element={ <PrivateRoute>
-					<Checkout/>
-				</PrivateRoute> }/>
-				{/* Checkout */}
+					{/* Checkout */}
+					<Route path="/checkout" element={ <PrivateRoute>
+						<Checkout/>
+					</PrivateRoute> }/>
+					{/* Checkout */}
 
-				{/* Error 404 */}
-				<Route path="*" element={ <Error/> }/>
-				{/* Error 404 */}
+					{/* Error 404 */}
+					<Route path="*" element={ <Error/> }/>
+					{/* Error 404 */}
 
-			</Routes>
-			{/* Routes */}
+				</Routes>
+				{/* Routes */}
 
-			{/* Footer */}
-			<Footer/>
-			{/* Footer */}
+				{/* Footer */}
+				<Footer/>
+				{/* Footer */}
 
-		</Router>
+			</Router>
+			{/* Router */}
+
+		</AuthWrapper>
 	);
 
 };
